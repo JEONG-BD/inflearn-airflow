@@ -25,7 +25,8 @@ services:
       - airflow
 
   minio:
-    image: minio/minio:RELEASE.2024-06-13T22-53-53Z
+    #image: minio/minio:RELEASE.2024-06-13T22-53-53Z
+    image: quay.io/minio/minio:RELEASE.2024-06-13T22-53-53Z
     container_name: minio
     hostname: minio
     restart: always
@@ -50,22 +51,18 @@ services:
     image: postgres:14
     container_name: postgres_app
     restart: always
-
     environment:
       POSTGRES_DB: delivery
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow123
-
     ports:
-      - "5433:5432"
-
+      - "5433:5432"  # HostPort:ContainerPort
     volumes:
-      - postgres_app_data:/var/lib/postgresql/data  
-      - ./init-db:/docker-entrypoint-initdb.d
+      - postgres_app_data:/var/lib/postgresql/data
     networks:
       - airflow
 
-  volumes:
-    mysql_data:
-    minio_data:
-    postgres_app_data:
+volumes:
+  mysql_data:
+  minio_data:
+  postgres_app_data:
